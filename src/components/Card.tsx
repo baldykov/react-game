@@ -12,15 +12,23 @@ export interface CardProps {
 const StyledCard = styled.div<CardProps>`
   font-size: 8em;
   display: block;
-  border: 1px solid gray;
+  border: 2px solid gray;
   border-radius: 5px;
-  max-width: 1em;
-  padding: 20px;
-  margin-right: 20px;
+  max-width: 2em;
+  padding: 0.1em;
+  user-select: none;
+  margin: 10px;
+  transition: 0.1s;
   transform: ${(p) => (p.selected ? "scale(1.1, 1.1)" : "none")};
+  box-shadow: ${(p) => (p.selected ? "0 0 10px rgba(0, 0, 0, 0.5)" : "")};
 
   :hover {
     cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  }
+
+  @media (max-width: 640px) {
+    font-size: 5em;
   }
 `;
 
@@ -28,7 +36,7 @@ export const Card: React.FC<CardProps> = (props) => {
   const { value, select, text, opened } = props;
   return (
     <StyledCard onClick={() => select(value)} {...props}>
-      {opened ? text : "❓"}
+      <span role="img">{opened ? text : "❓"}</span>
     </StyledCard>
   );
 };
