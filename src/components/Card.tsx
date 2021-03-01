@@ -10,11 +10,12 @@ export interface CardProps {
 }
 
 const StyledCard = styled.div<CardProps>`
-  font-size: 8em;
+  font-size: 7em;
+  text-align: center;
   display: block;
   border: 2px solid gray;
   border-radius: 5px;
-  max-width: 2em;
+  width: 1.2em;
   padding: 0.1em;
   user-select: none;
   margin: 10px;

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Card } from "./components/Card";
-import { CardList } from "./components/CardList";
 import { Board } from "./components/Board";
 import { getRandomEmojis } from "./static/emoji";
+import "antd/dist/antd.css";
 
 export interface EmojiObject {
   emoji: string;
@@ -11,19 +10,23 @@ export interface EmojiObject {
   opened: boolean;
 }
 
-const emojis: string[] = getRandomEmojis(4);
-const emojiPairs: EmojiObject[] = emojis
-  .concat(emojis)
-  .map((emoji) => ({
-    emoji,
-    value: Math.random(),
-    selected: false,
-    opened: true,
-  }))
-  .sort((a, b) => (a.value > b.value ? 1 : -1));;
+const generateEmojiObjects = (emojis: string[]) => {
+  return emojis
+      .concat(emojis)
+      .map((emoji) => ({
+        emoji,
+        value: Math.random(),
+        selected: false,
+        opened: true,
+      }))
+      .sort((a, b) => (a.value > b.value ? 1 : -1))
+};
+
+const CARDS_COUNT = 4
+const initCards = generateEmojiObjects(getRandomEmojis(CARDS_COUNT))
 
 function App() {
-  const [cards, setCards] = useState(emojiPairs);
+  const [cards, setCards] = useState(initCards);
   const [blocked, setBlocked] = useState(false);
 
   const select = (cards: EmojiObject[], value: number) => {
@@ -66,7 +69,7 @@ function App() {
     }
   }, [cards]);
 
-  const closeAll = (cards: EmojiObject[]) => {
+  const close = (cards: EmojiObject[]) => {
     const _cards = [...cards];
     for (const card of _cards) {
       card.opened = false;
@@ -74,28 +77,28 @@ function App() {
     setCards(_cards);
   };
 
-  useEffect(() => {
+  const closeWithDelay = (_cards: EmojiObject[], delay: number) => {
     setBlocked(true);
     setTimeout(() => {
-      closeAll(emojiPairs);
+      close(_cards);
       setBlocked(false);
-    }, 2000);
+    }, delay);
+  }
+
+  useEffect(() => {
+    closeWithDelay(cards, 2000)
+  // eslint-disable-next-line
   }, []);
 
-  const cardComponents = cards.map((emoji) => (
-    <Card
-      value={emoji.value}
-      text={emoji.emoji}
-      key={emoji.value}
-      selected={emoji.selected}
-      select={(value: number) => select(cards, value)}
-      opened={emoji.opened}
-    />
-  ));
+  const newGame = (count: number) => {
+    const newCards = generateEmojiObjects(getRandomEmojis(count / 2));
+    setCards(newCards);
+
+    closeWithDelay(newCards, 2000)
+  };
+
   return (
-    <Board>
-      <CardList cards={cardComponents} />
-    </Board>
+    <Board cards={cards} select={(value: number) => select(cards, value)} newGame={newGame} />
   );
 }
 

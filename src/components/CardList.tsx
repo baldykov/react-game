@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import { EmojiObject } from "../App";
+import { Card } from "./Card";
 
 const StyledCardLsit = styled.div`
   display: flex;
@@ -8,9 +10,23 @@ const StyledCardLsit = styled.div`
 `;
 
 export interface CardListProps {
-  cards: any[];
+  cards: EmojiObject[];
+  select: (value: number) => void;
 }
 
-export const CardList: React.FC<CardListProps> = ({ cards }) => {
-  return <StyledCardLsit>{cards}</StyledCardLsit>;
+export const CardList: React.FC<CardListProps> = ({ cards, select }) => {
+  return (
+    <StyledCardLsit>
+      {cards.map((card) => (
+        <Card
+          value={card.value}
+          text={card.emoji}
+          key={card.value}
+          selected={card.selected}
+          select={select}
+          opened={card.opened}
+        />
+      ))}
+    </StyledCardLsit>
+  );
 };
