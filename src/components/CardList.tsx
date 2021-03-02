@@ -11,10 +11,15 @@ const StyledCardLsit = styled.div`
 
 export interface CardListProps {
   cards: EmojiObject[];
+  blocked: boolean;
   select: (value: number) => void;
 }
 
-export const CardList: React.FC<CardListProps> = ({ cards, select }) => {
+export const CardList: React.FC<CardListProps> = ({
+  cards,
+  select,
+  blocked,
+}) => {
   return (
     <StyledCardLsit>
       {cards.map((card) => (
@@ -25,6 +30,7 @@ export const CardList: React.FC<CardListProps> = ({ cards, select }) => {
           selected={card.selected}
           select={select}
           opened={card.opened}
+          blocked={blocked}
         />
       ))}
     </StyledCardLsit>

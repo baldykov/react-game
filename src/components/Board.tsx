@@ -1,7 +1,8 @@
-import { Button, Radio, Space } from "antd";
-import React from "react";
+import { Button, Radio, Slider, Space } from "antd";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { EmojiObject } from "../App";
+import { AppContext } from "../appContext";
 import { CardList } from "./CardList";
 
 const StyledBoard = styled.div``;
@@ -26,15 +27,24 @@ const StyledMenu = styled.div`
 
 export interface BoardProps {
   cards: EmojiObject[];
+  blocked: boolean;
   select: (value: number) => void;
   newGame: (count: number) => void;
+  setVolume: (volume: number) => void;
 }
 
-export const Board: React.FC<BoardProps> = ({ cards, select, newGame }) => {
+export const Board: React.FC<BoardProps> = ({
+  cards,
+  select,
+  newGame,
+  blocked,
+  setVolume,
+}) => {
   const handleCounthange = (e: any) => {
     newGame(Number(e.target.value));
   };
 
+  const settings = useContext(AppContext);
   return (
     <StyledBoard>
       <StyledHeader>memojis</StyledHeader>
@@ -51,9 +61,15 @@ export const Board: React.FC<BoardProps> = ({ cards, select, newGame }) => {
             <Radio.Button value="16">16</Radio.Button>
             <Radio.Button value="32">32</Radio.Button>
           </Radio.Group>
+          <Slider
+            defaultValue={settings.volume}
+            style={{ width: "100px"   }}
+            onChange={(value: number) => setVolume(value)}
+            tipFormatter={(value) => `volume: ${value}`}
+          />
         </Space>
       </StyledMenu>
-      <CardList cards={cards} select={select} />
+      <CardList cards={cards} select={select} blocked={blocked} />
     </StyledBoard>
   );
 };

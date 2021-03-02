@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Board } from "./components/Board";
 import { getRandomEmojis } from "./static/emoji";
 import "antd/dist/antd.css";
+import Sound from "react-sound";
+import { AppContext } from "./appContext";
 
 export interface EmojiObject {
   emoji: string;
@@ -28,6 +30,9 @@ const initCards = generateEmojiObjects(getRandomEmojis(CARDS_COUNT))
 function App() {
   const [cards, setCards] = useState(initCards);
   const [blocked, setBlocked] = useState(false);
+  const [pairSoundStatus, setPairSoundStatus] = useState<"STOPPED" | "PLAYING">(
+    "STOPPED"
+  );
 
   const select = (cards: EmojiObject[], value: number) => {
     if (blocked) return;
@@ -59,6 +64,9 @@ function App() {
       setBlocked(true);
       const cardsEqual: boolean =
         selectedCards[0].emoji === selectedCards[1].emoji;
+      if (cardsEqual) {
+        setPairSoundStatus("PLAYING");
+      }
       setTimeout(
         () => {
           handlePair(cards, cardsEqual);
@@ -97,8 +105,28 @@ function App() {
     closeWithDelay(newCards, 2000)
   };
 
+  const setVolume = (volume: number) => {
+    setSettings({ ...settings, volume });
+  };
+
+  const [settings, setSettings] = useState({ volume: 30 });
   return (
-    <Board cards={cards} select={(value: number) => select(cards, value)} newGame={newGame} />
+    <AppContext.Provider value={settings}>
+      <Board
+        cards={cards}
+        select={(value: number) => select(cards, value)}
+        newGame={newGame}
+        blocked={blocked}
+        setVolume={setVolume}
+      />
+      <Sound
+        url="http://notification-sounds.com/soundsfiles/Ticket-machine-sound.mp3"
+        playStatus={pairSoundStatus}
+        onFinishedPlaying={() => setPairSoundStatus("STOPPED")}
+        volume={settings.volume}
+        playbackRate={2}
+      />
+    </AppContext.Provider>
   );
 }
 
