@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { Board } from "./components/Board";
 import { getRandomEmojis } from "./static/emoji";
 import "antd/dist/antd.css";
@@ -14,18 +14,18 @@ export interface EmojiObject {
 
 const generateEmojiObjects = (emojis: string[]) => {
   return emojis
-      .concat(emojis)
-      .map((emoji) => ({
-        emoji,
-        value: Math.random(),
-        selected: false,
-        opened: true,
-      }))
-      .sort((a, b) => (a.value > b.value ? 1 : -1))
+    .concat(emojis)
+    .map((emoji) => ({
+      emoji,
+      value: Math.random(),
+      selected: false,
+      opened: true,
+    }))
+    .sort((a, b) => (a.value > b.value ? 1 : -1));
 };
 
-const CARDS_COUNT = 4
-const initCards = generateEmojiObjects(getRandomEmojis(CARDS_COUNT))
+const CARDS_COUNT = 4;
+const initCards = generateEmojiObjects(getRandomEmojis(CARDS_COUNT));
 
 function App() {
   const [cards, setCards] = useState(initCards);
@@ -91,18 +91,18 @@ function App() {
       close(_cards);
       setBlocked(false);
     }, delay);
-  }
+  };
 
   useEffect(() => {
-    closeWithDelay(cards, 2000)
-  // eslint-disable-next-line
+    closeWithDelay(cards, 2000);
+    // eslint-disable-next-line
   }, []);
 
   const newGame = (count: number) => {
     const newCards = generateEmojiObjects(getRandomEmojis(count / 2));
     setCards(newCards);
 
-    closeWithDelay(newCards, 2000)
+    closeWithDelay(newCards, 2000);
   };
 
   const setVolume = (volume: number) => {
@@ -123,7 +123,7 @@ function App() {
         url="http://notification-sounds.com/soundsfiles/Ticket-machine-sound.mp3"
         playStatus={pairSoundStatus}
         onFinishedPlaying={() => setPairSoundStatus("STOPPED")}
-        volume={settings.volume}
+        volume={settings.volume - 20}
         playbackRate={2}
       />
     </AppContext.Provider>

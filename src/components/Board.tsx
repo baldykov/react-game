@@ -25,6 +25,13 @@ const StyledMenu = styled.div`
   padding-bottom: 20px;
 `;
 
+const StyledFooter = styled.div`
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
+`;
+
 export interface BoardProps {
   cards: EmojiObject[];
   blocked: boolean;
@@ -63,13 +70,27 @@ export const Board: React.FC<BoardProps> = ({
           </Radio.Group>
           <Slider
             defaultValue={settings.volume}
-            style={{ width: "100px"   }}
+            style={{ width: "70px" }}
             onChange={(value: number) => setVolume(value)}
             tipFormatter={(value) => `volume: ${value}`}
           />
         </Space>
       </StyledMenu>
       <CardList cards={cards} select={select} blocked={blocked} />
+
+      <StyledFooter>
+        <Space style={{ margin: "0 auto" }}>
+          <a href="https://github.com/baldykov">@baldykov</a>
+          <a href="https://rs.school/js/">
+            <img
+              src="https://rs.school/images/rs_school_js.svg"
+              width="60px"
+              alt="RS School"
+            />
+          </a>
+          <span>2021</span>
+        </Space>
+      </StyledFooter>
     </StyledBoard>
   );
 };

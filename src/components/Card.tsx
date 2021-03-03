@@ -16,19 +16,23 @@ const StyledCard = styled.div<CardProps>`
   font-size: 7em;
   text-align: center;
   display: block;
-  border: 2px solid gray;
   border-radius: 5px;
-  width: 1.2em;
+  width: 1.3em;
   padding: 0.1em;
   user-select: none;
   margin: 10px;
   transition: 0.1s;
   transform: ${(p) => (p.selected ? "scale(1.1, 1.1)" : "none")};
-  box-shadow: ${(p) => (p.selected ? "0 0 10px rgba(0, 0, 0, 0.5)" : "")};
+
+  background: rgb(145, 205, 255);
+  background: radial-gradient(
+    circle,
+    rgba(145, 205, 255, 1) 0%,
+    rgba(61, 174, 255, 1) 100%
+  );
 
   :hover {
     cursor: pointer;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   }
 
   @media (max-width: 640px) {
@@ -51,7 +55,7 @@ export const Card: React.FC<CardProps> = (props) => {
   const settings = useContext(AppContext);
   return (
     <StyledCard onClick={selectHandler} {...props}>
-      <span role="img">{opened ? text : "❓"}</span>
+      <span role="img">{opened ? text : "❔"}</span>
       <Sound
         url="http://notification-sounds.com/soundsfiles/Card-flip-sound-effect.mp3"
         playStatus={soundStatus}
