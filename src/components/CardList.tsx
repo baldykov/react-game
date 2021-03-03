@@ -7,6 +7,7 @@ const StyledCardLsit = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  overflow: auto;
 `;
 
 export interface CardListProps {

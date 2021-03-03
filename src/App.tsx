@@ -4,6 +4,7 @@ import { getRandomEmojis } from "./static/emoji";
 import "antd/dist/antd.css";
 import Sound from "react-sound";
 import { AppContext } from "./appContext";
+import fx from "fireworks";
 
 export interface EmojiObject {
   emoji: string;
@@ -54,6 +55,24 @@ function App() {
         card.selected = false;
         card.opened = isEqual;
       }
+    }
+    if (!_cards.some((card) => !card.opened)) {
+      let range = (n: number) => [...new Array(n)];
+
+      range(20).forEach((_, i) =>
+        setTimeout(() => {
+          range(5).forEach(() => {
+            fx({
+              x:
+                Math.random() * (window.innerWidth / 2) + window.innerWidth / 4,
+              y:
+                Math.random() * (window.innerHeight / 2) +
+                window.innerHeight / 4,
+              colors: ["#cc3333", "#4CAF50", "#81C784"],
+            });
+          });
+        }, i * 1000)
+      );
     }
     setCards(_cards);
   };
